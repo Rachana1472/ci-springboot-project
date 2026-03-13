@@ -28,7 +28,7 @@ stages {
     stage('SonarQube Analysis') {
         steps {
             withSonarQubeEnv('SonarQube') {
-                bat 'mvn sonar:sonar -Dsonar.projectKey=%SONAR_PROJECT_KEY% -Dsonar.host.url=%SONAR_HOST_URL%'
+                bat 'mvn sonar:sonar -Dsonar.projectKey=springboot-ci-project -Dsonar.host.url=http://localhost:9000'
             }
         }
     }
@@ -37,10 +37,10 @@ stages {
 
 post {
     success {
-        echo 'Build and SonarQube analysis completed successfully!'
+        echo 'Pipeline completed successfully!'
     }
     failure {
-        echo 'Pipeline failed. Check Jenkins console output.'
+        echo 'Pipeline failed. Check Jenkins logs.'
     }
 }
 ```
