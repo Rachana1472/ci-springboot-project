@@ -1,45 +1,45 @@
 pipeline {
-    agent any
+agent any
 
-    tools {
-        maven 'Maven'
+```
+tools {
+    maven 'Maven'
+}
+
+environment {
+    SONAR_HOST_URL = "http://localhost:9000"
+    SONAR_PROJECT_KEY = "springboot-ci-project"
+}
+
+stages {
+
+    stage('Build Project') {
+        steps {
+            bat 'mvn clean install'
+        }
     }
 
-    environment {
-        SONAR_HOST_URL = "http://localhost:9000"
-        SONAR_PROJECT_KEY = "springboot-ci-project"
+    stage('Run Tests') {
+        steps {
+            bat 'mvn test'
+        }
     }
 
-    stages {
-
-        stage('Build Project') {
-            steps {
-                bat 'mvn clean install'
+    stage('SonarQube Analysis') {
+        steps {
+            withSonarQubeEnv('SonarQube') {
+                bat 'mvn sonar:sonar'
             }
         }
-
-        stage('Run Tests') {
-            steps {
-                bat 'mvn test'
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                withSonarQubeEnv('SonarQube') {
-                    bat 'mvn sonar:sonar -Dsonar.projectKey=springboot-ci-project -Dsonar.host.url=http://localhost:9000'
-                }
-            }
-        }
-
     }
 
-    post {
-        success {
-            echo 'Pipeline completed successfully'
-        }
-        failure {
-            echo 'Pipeline failed'
+    stage('Docker Build') {
+        steps {
+            bat 'docker build -t springboot-ci-app .'
         }
     }
+
+}
+```
+
 }
