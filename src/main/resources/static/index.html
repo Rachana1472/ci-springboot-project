@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DevOps CI/CD Dashboard</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:linear-gradient(135deg,#141e30,#243b55);
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+color:white;
+}
+
+.card{
+background:white;
+color:#333;
+padding:40px;
+border-radius:15px;
+width:800px;
+text-align:center;
+box-shadow:0 20px 40px rgba(0,0,0,0.4);
+}
+
+h1{
+color:#2c3e50;
+}
+
+.pipeline{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:30px;
+}
+
+.step{
+text-align:center;
+opacity:0.3;
+transition:0.5s;
+}
+
+.step.active{
+opacity:1;
+transform:scale(1.2);
+}
+
+.step img{
+width:60px;
+}
+
+.arrow{
+font-size:30px;
+color:#888;
+}
+
+.status{
+margin-top:25px;
+padding:15px;
+background:#28a745;
+color:white;
+border-radius:8px;
+font-weight:bold;
+display:none;
+}
+
+.apistatus{
+margin-top:15px;
+font-size:18px;
+}
+
+.footer{
+margin-top:20px;
+font-size:14px;
+color:gray;
+}
+
+.loader{
+border:5px solid #f3f3f3;
+border-top:5px solid #3498db;
+border-radius:50%;
+width:30px;
+height:30px;
+animation:spin 1s linear infinite;
+margin:auto;
+}
+
+@keyframes spin{
+0%{transform:rotate(0deg)}
+100%{transform:rotate(360deg)}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>🚀 DevOps CI/CD Pipeline</h1>
+
+<p>Spring Boot Application Deployment Dashboard</p>
+
+<div class="pipeline">
+
+<div class="step" id="step1">
+<img src="https://cdn-icons-png.flaticon.com/512/25/25231.png">
+<p>GitHub</p>
+</div>
+
+<div class="arrow">→</div>
+
+<div class="step" id="step2">
+<img src="https://cdn-icons-png.flaticon.com/512/5969/5969172.png">
+<p>Jenkins</p>
+</div>
+
+<div class="arrow">→</div>
+
+<div class="step" id="step3">
+<img src="https://cdn-icons-png.flaticon.com/512/919/919836.png">
+<p>Maven</p>
+</div>
+
+<div class="arrow">→</div>
+
+<div class="step" id="step4">
+<img src="https://cdn-icons-png.flaticon.com/512/5968/5968866.png">
+<p>SonarQube</p>
+</div>
+
+<div class="arrow">→</div>
+
+<div class="step" id="step5">
+<img src="https://cdn-icons-png.flaticon.com/512/919/919853.png">
+<p>Docker</p>
+</div>
+
+</div>
+
+<div class="status" id="status">
+✔ Build Successful | ✔ Tests Passed | ✔ Deployment Complete
+</div>
+
+<div class="apistatus" id="api">
+Checking Application Status...
+<div class="loader"></div>
+</div>
+
+<p id="time"></p>
+
+<div class="footer">
+CI/CD Pipeline Demonstration
+</div>
+
+</div>
+
+<script>
+
+const steps=[
+document.getElementById("step1"),
+document.getElementById("step2"),
+document.getElementById("step3"),
+document.getElementById("step4"),
+document.getElementById("step5")
+];
+
+let i=0;
+
+function runPipeline(){
+
+if(i<steps.length){
+
+steps[i].classList.add("active");
+
+i++;
+
+setTimeout(runPipeline,700);
+
+}
+
+else{
+
+document.getElementById("status").style.display="block";
+
+checkAPI();
+
+}
+
+}
+
+runPipeline();
+
+function checkAPI(){
+
+fetch('/hello')
+
+.then(response=>response.text())
+
+.then(data=>{
+document.getElementById("api").innerHTML =
+"✔ Application Status: Running<br><b>"+data+"</b>";
+})
+
+.catch(()=>{
+document.getElementById("api").innerHTML =
+"❌ Application not responding";
+});
+
+}
+
+const date=new Date();
+
+document.getElementById("time").innerHTML =
+"Deployment Time: "+date.toLocaleString();
+
+</script>
+
+</body>
+</html>
